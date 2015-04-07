@@ -4,9 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import controller.AbstractQuerier;
+import controller.OpenCnamQuerier;
+import model.QueryResult;
+import threadimplementations.AsyncResponse;
+import threadimplementations.QuerierAsyncTask;
 
 
-public class PrankCallerIdentification extends Activity {
+public class PrankCallerIdentification extends Activity implements AsyncResponse {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +43,18 @@ public class PrankCallerIdentification extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void startSearch(View view)
+    {
+        QuerierAsyncTask task = new QuerierAsyncTask(this);
+        task.execute("16502530000");
+    }
+
+    @Override
+    public void processFinish(QueryResult result)
+    {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText(result.getDescription());
     }
 }
