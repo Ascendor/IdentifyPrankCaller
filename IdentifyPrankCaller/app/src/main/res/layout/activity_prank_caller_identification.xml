@@ -7,17 +7,31 @@
     tools:context=".PrankCallerIdentification">
 
     <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
+        android:text="Search via GUI Thread"
         android:id="@+id/searchButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:onClick="startSearch"/>
+        android:onClick="startSearchGuiThread"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/searchButtonAsync"
+        android:layout_alignEnd="@+id/searchButtonAsync"
+        android:layout_marginTop="61dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search via AsyncTask"
+        android:id="@+id/searchButtonAsync"
+        android:clickable="true"
+        android:onClick="startSearchAsyncTask"
+        android:layout_below="@+id/searchButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,6 +40,6 @@
         android:id="@+id/resultText"
         android:layout_below="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="160dp" />
 
 </RelativeLayout>

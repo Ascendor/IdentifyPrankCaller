@@ -2,6 +2,7 @@ package hs_kl.de.identifyprankcaller;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,10 +46,22 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         return super.onOptionsItemSelected(item);
     }
 
-    public void startSearch(View view)
+    public void startSearchAsyncTask(View view)
     {
         QuerierAsyncTask task = new QuerierAsyncTask(this);
         task.execute("16502530000");
+    }
+
+    public void startSearchGuiThread(View view)
+    {
+        // @todo @fixme Don't do stuff like this! It's here just for demonstration purposes.
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        // End hack
+
+        AbstractQuerier querier = new OpenCnamQuerier();
+        QueryResult result = querier.query("16502530000");
+        this.processFinish(result);
     }
 
     @Override
