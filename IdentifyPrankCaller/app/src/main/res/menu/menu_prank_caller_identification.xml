@@ -7,7 +7,8 @@
         <menu>
 
             <group android:id="@+id/task_methods"
-               android:enabled="true">
+               android:enabled="true"
+               android:checkableBehavior="single">
 
                 <item android:id="@+id/task_method_gui"
                     android:title="GUI Thread"
@@ -28,7 +29,8 @@
         android:title="Search Engine">
         <menu>
             <group android:id="@+id/search_engines"
-                    android:enabled="true">
+                    android:enabled="true"
+                    android:checkableBehavior="single">
 
                 <item android:id="@+id/search_engine_google"
                     android:title="Google Search"
