@@ -6,39 +6,30 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".PrankCallerIdentification">
 
-    <Spinner
-        android:layout_width="wrap_content"
+    <EditText
+        style="?android:attr/spinnerStyle"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinCallingNumber"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:entries="@string/DefSpinCallingNumber"
-        android:spinnerMode="dropdown"
-        android:prompt="@string/DefSpinCallingNumber"
-        style="@style/AppTheme"
-        android:layout_centerHorizontal="true"
-        android:clickable="true"
-        android:dropDownWidth="fill_parent"
-        android:theme="@style/AppTheme"
-        android:visibility="visible" />
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/edtCallingNumber" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search via GUI Thread"
+        android:text="@string/BtnSearchGUIText"
         android:id="@+id/searchButton"
         android:clickable="true"
         android:onClick="startSearchGuiThread"
-        android:layout_below="@+id/spinCallingNumber"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        style="@style/AppTheme" />
+        style="@style/AppTheme"
+        android:layout_below="@+id/edtCallingNumber" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search via AsyncTask"
+        android:text="@string/BtnSearchAsyncText"
         android:id="@+id/searchButtonAsync"
         android:clickable="true"
         android:onClick="startSearchAsyncTask"
