@@ -1,5 +1,48 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".PrankCallerIdentification">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PrankCallerIdentification">
+
+    <item android:id="@+id/tasks"
+        android:title="Task Method">
+        <menu>
+
+            <group android:id="@+id/task_methods"
+               android:enabled="true"
+               android:checkableBehavior="single">
+
+                <item android:id="@+id/task_method_gui"
+                    android:title="GUI Thread"
+                    android:checkable="true"
+                    android:enabled="true" />
+
+                <item android:id="@+id/task_method_async"
+                    android:title="Async Task"
+                    android:checkable="true"
+                    android:enabled="true" />
+
+            </group>
+        </menu>
+    </item>
+
+
+    <item android:id="@+id/search"
+        android:title="Search Engine">
+        <menu>
+            <group android:id="@+id/search_engines"
+                    android:enabled="true"
+                    android:checkableBehavior="single">
+
+                <item android:id="@+id/search_engine_google"
+                    android:title="Google Search"
+                    android:checkable="true"
+                    android:enabled="true" />
+
+                <item android:id="@+id/search_engine_open_cname"
+                    android:title="Open CName"
+                    android:checkable="true"
+                    android:enabled="true" />
+
+            </group>
+        </menu>
+    </item>
 </menu>
