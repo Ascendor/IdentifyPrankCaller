@@ -52,6 +52,24 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         task.execute("16502530000");
     }
 
+    public void startSearchThread(View view)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AbstractQuerier querier = new OpenCnamQuerier();
+                final QueryResult result = querier.query("16502530000");
+                PrankCallerIdentification.this.runOnUiThread(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        PrankCallerIdentification.this.processFinish(result);
+                    }
+                });
+            }
+        }).start();
+    }
+
     public void startSearchGuiThread(View view)
     {
         // @todo @fixme Don't do stuff like this! It's here just for demonstration purposes.

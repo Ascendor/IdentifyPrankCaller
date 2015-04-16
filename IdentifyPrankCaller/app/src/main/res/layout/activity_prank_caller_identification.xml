@@ -19,8 +19,7 @@
         android:onClick="startSearchGuiThread"
         android:layout_below="@+id/textView"
         android:layout_alignRight="@+id/searchButtonAsync"
-        android:layout_alignEnd="@+id/searchButtonAsync"
-        android:layout_marginTop="61dp" />
+        android:layout_alignEnd="@+id/searchButtonAsync" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,16 +29,27 @@
         android:clickable="true"
         android:onClick="startSearchAsyncTask"
         android:layout_below="@+id/searchButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp" />
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search via manual Thread"
+        android:id="@+id/searchButtonThread"
+        android:clickable="true"
+        android:onClick="startSearchThread"
+        android:layout_below="@+id/searchButtonAsync"
+        android:layout_alignLeft="@+id/searchButtonAsync"
+        android:layout_alignStart="@+id/searchButtonAsync" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/resultText"
-        android:layout_below="@+id/searchButton"
+        android:text="Search Result:"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp" />
+        android:layout_marginBottom="43dp" />
 
 </RelativeLayout>
