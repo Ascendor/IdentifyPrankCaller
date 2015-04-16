@@ -15,6 +15,11 @@
                     android:checkable="true"
                     android:enabled="true" />
 
+                <item android:id="@+id/task_method_thread"
+                    android:title="Thread (manual)"
+                    android:checkable="true"
+                    android:enabled="true" />
+
                 <item android:id="@+id/task_method_async"
                     android:title="Async Task"
                     android:checkable="true"
