@@ -39,7 +39,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_tasks) {
             return true;
         }
 

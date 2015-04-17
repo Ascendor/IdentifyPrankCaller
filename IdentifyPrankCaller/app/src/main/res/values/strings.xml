@@ -6,5 +6,4 @@
     <string name="DefSpinCallingNumber">063315580</string>
     <string name="BtnSearchGUIText">Search via GUI Thread</string>
     <string name="BtnSearchAsyncText">Search via AsyncTask</string>
-    <string name="BtnSearchAsyncText">Search via AsyncTask</string>
 </resources>
