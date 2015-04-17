@@ -29,13 +29,27 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/BtnSearchThreadText"
+        android:id="@+id/searchButtonThread"
+        android:clickable="true"
+        android:onClick="startSearchThread"
+        android:layout_below="@+id/searchButton"
+        android:layout_alignRight="@+id/searchButton"
+        android:layout_alignEnd="@+id/searchButton"
+        style="@style/AppTheme"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/BtnSearchAsyncText"
         android:id="@+id/searchButtonAsync"
         android:clickable="true"
         android:onClick="startSearchAsyncTask"
-        android:layout_below="@+id/searchButton"
-        android:layout_alignRight="@+id/searchButton"
-        android:layout_alignEnd="@+id/searchButton"
+        android:layout_below="@+id/searchButtonThread"
+        android:layout_alignRight="@+id/searchButtonThread"
+        android:layout_alignEnd="@+id/searchButtonThread"
         style="@style/AppTheme" />
 
     <FrameLayout
