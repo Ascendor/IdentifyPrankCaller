@@ -20,7 +20,6 @@
                     android:checkable="true"
                     android:enabled="true" />
 
-                <item android:id="@+id/task_method_async"
                 <item android:id="@+id/menu_task_method_async"
                     android:title="Async Task"
                     android:checkable="true"
