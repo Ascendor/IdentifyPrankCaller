@@ -52,7 +52,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
          //Set checked state to the selected menu item
         switch (iid) {
             case R.id.menu_task_method_gui:
-                return setVisualMenuCheckState(MENU_TASK_METHOD_GUI, "menu_task_methods", item);
+                return setVisualMenuCheckState( MENU_TASK_METHOD_GUI, "menu_task_methods", item );
             case R.id.menu_task_method_thread:
                 return setVisualMenuCheckState( MENU_TASK_METHOD_THREAD, "menu_task_methods", item );
             case R.id.menu_task_method_async:
@@ -64,6 +64,19 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    public void startSearch(View view)
+    {
+       //Start search depending on the menu_values
+       if (menu_values[MENU_TASK_METHOD_ASYNC]) {
+           startSearchAsyncTask(view);
+       } else if (menu_values[MENU_TASK_METHOD_GUI]){
+                 startSearchGuiThread(view);
+              } else if (menu_values[MENU_TASK_METHOD_THREAD]){
+                        startSearchThread(view);
+                     }
     }
 
 
@@ -120,6 +133,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         menu_values[MENU_TASK_METHOD_ASYNC] = settings.getBoolean("menu_task_method_async", false);
         menu_values[MENU_SEARCH_ENGINE_GOOGLE] = settings.getBoolean("menu_search_engine_google", false);
         menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME] = settings.getBoolean("menu_search_engine_open_cname", false);
+
     }
 
 
