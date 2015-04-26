@@ -16,9 +16,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/searchButtonAsync"
         android:layout_alignStart="@+id/searchButtonAsync"
-        android:layout_toLeftOf="@+id/historyImgButton"
-        android:layout_toStartOf="@+id/historyImgButton"
-        android:layout_alignBottom="@+id/historyImgButton" />
+        android:layout_toLeftOf="@+id/searchImgButton"
+        android:layout_toStartOf="@+id/searchImgButton"
+        android:layout_alignBottom="@+id/searchImgButton" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -39,9 +39,10 @@
         android:clickable="true"
         android:onClick="startSearchGuiThread"
         style="@style/AppTheme"
-        android:layout_below="@+id/historyImgButton"
         android:layout_alignRight="@+id/searchButtonAsync"
-        android:layout_alignEnd="@+id/searchButtonAsync" />
+        android:layout_alignEnd="@+id/searchButtonAsync"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/searchImgButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -87,15 +88,5 @@
             android:maxLines="5"
             android:minLines="1" />
     </FrameLayout>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/historyImgButton"
-        android:layout_alignParentTop="true"
-        android:src="@android:drawable/ic_input_get"
-        android:layout_alignBottom="@+id/searchImgButton"
-        android:layout_toLeftOf="@+id/searchImgButton"
-        android:layout_toStartOf="@+id/searchImgButton" />
 
 </RelativeLayout>
