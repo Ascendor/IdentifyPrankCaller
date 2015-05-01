@@ -118,13 +118,12 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
     public void startSearchThread(View view)
     {
+        final String number = getCallingNumber(view);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 AbstractQuerier querier = new OpenCnamQuerier();
-                final QueryResult result = querier.query("16502530000");
-                //ToDo: Wie den Parameter übergeben???
-                //final QueryResult result = querier.query(getCallingNumber(view));
+                final QueryResult result = querier.query(number);
                 PrankCallerIdentification.this.runOnUiThread(new Runnable(){
                     @Override
                     public void run()
