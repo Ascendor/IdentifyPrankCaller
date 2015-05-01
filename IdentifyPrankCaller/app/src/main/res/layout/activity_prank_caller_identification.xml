@@ -8,11 +8,28 @@
 
     <EditText
         style="?android:attr/spinnerStyle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
-        android:id="@+id/edtCallingNumber" />
+        android:id="@+id/edtCallingNumber"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/searchButtonAsync"
+        android:layout_alignStart="@+id/searchButtonAsync"
+        android:layout_toLeftOf="@+id/searchImgButton"
+        android:layout_toStartOf="@+id/searchImgButton"
+        android:layout_alignBottom="@+id/searchImgButton" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchImgButton"
+        android:clickable="true"
+        android:src="@android:drawable/ic_search_category_default"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="startSearch" />
 
     <Button
         android:layout_width="wrap_content"
@@ -21,10 +38,11 @@
         android:id="@+id/searchButton"
         android:clickable="true"
         android:onClick="startSearchGuiThread"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         style="@style/AppTheme"
-        android:layout_below="@+id/edtCallingNumber" />
+        android:layout_alignRight="@+id/searchButtonAsync"
+        android:layout_alignEnd="@+id/searchButtonAsync"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/searchImgButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -47,10 +65,10 @@
         android:id="@+id/searchButtonAsync"
         android:clickable="true"
         android:onClick="startSearchAsyncTask"
+        style="@style/AppTheme"
         android:layout_below="@+id/searchButtonThread"
-        android:layout_alignRight="@+id/searchButtonThread"
-        android:layout_alignEnd="@+id/searchButtonThread"
-        style="@style/AppTheme" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <FrameLayout
         android:layout_width="fill_parent"

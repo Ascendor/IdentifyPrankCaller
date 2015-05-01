@@ -7,22 +7,19 @@
         <menu>
 
             <group android:id="@+id/menu_task_methods"
-               android:enabled="true"
-               android:checkableBehavior="single">
+                    android:enabled="true"
+                    android:checkableBehavior="single">
 
                 <item android:id="@+id/menu_task_method_gui"
                     android:title="GUI Thread"
-                    android:checkable="true"
                     android:enabled="true" />
 
-                <item android:id="@+id/task_method_thread"
-                    android:title="Thread (manual)"
-                    android:checkable="true"
-                    android:enabled="true" />
+                <item android:id="@+id/menu_task_method_thread"
+                     android:title="Thread (manual)"
+                     android:enabled="true" />
 
                 <item android:id="@+id/menu_task_method_async"
                     android:title="Async Task"
-                    android:checkable="true"
                     android:enabled="true" />
 
             </group>
@@ -39,12 +36,10 @@
 
                 <item android:id="@+id/menu_search_engine_google"
                     android:title="Google Search"
-                    android:checkable="true"
                     android:enabled="true" />
 
                 <item android:id="@+id/menu_search_engine_open_cname"
                     android:title="Open CName"
-                    android:checkable="true"
                     android:enabled="true" />
 
             </group>
