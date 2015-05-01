@@ -3,6 +3,9 @@ package hs_kl.de.identifyprankcaller;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
@@ -98,6 +101,13 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         return callingNumber;
     }
 
+    public void startSearchLooper (View view)
+    {
+        /*
+        Handler handler = new Handler();
+        handler.post()
+        */
+    }
 
     public void startSearchAsyncTask(View view)
     {
