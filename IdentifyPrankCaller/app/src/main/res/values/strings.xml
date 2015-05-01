@@ -7,4 +7,5 @@
     <string name="BtnSearchGUIText">Search via GUI Thread</string>
     <string name="BtnSearchAsyncText">Search via AsyncTask</string>
     <string name="BtnSearchThreadText">Search via Thread</string>
+    <string name="BtnSearchLooperText">Search via Looper</string>
 </resources>

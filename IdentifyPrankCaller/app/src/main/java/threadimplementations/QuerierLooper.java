@@ -1,9 +1,7 @@
 package threadimplementations;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 
 import controller.AbstractQuerier;
 import controller.OpenCnamQuerier;
@@ -15,29 +13,37 @@ import model.QueryResult;
 public class QuerierLooper extends Thread
 {
     public Handler handler;
+    private AsyncResponse callback;
+
+    public QuerierLooper(AsyncResponse response)
+    {
+        super();
+        this.callback = response;
+
+    }
 
     public void run()
     {
         Looper.prepare();
-     /*
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
 
-                Bundle bundle = msg.getData();
-                String number = bundle.getString("number");
-                AbstractQuerier querier = new OpenCnamQuerier();
-                final QueryResult result = querier.query(number);
-                PrankCallerIdentification.this.runOnUiThread(new Runnable(){
-                    @Override
-                    public void run()
-                    {
-                        PrankCallerIdentification.this.processFinish(result);
-                    }
-                });
-            }
-        };
-        */
+        handler = new Handler();
+
         Looper.loop();
+    }
+
+    public synchronized void enqueueQuery(final String phoneNumber) {
+        this.handler.post(new Runnable(){
+            public void run(){
+                AbstractQuerier querier = new OpenCnamQuerier();
+                final QueryResult result = querier.query(phoneNumber);
+                Runnable uiTask = new Runnable() {
+                    @Override
+                    public void run() {
+                        QuerierLooper.this.callback.processFinish(result);
+                    }
+                };
+                new Handler(Looper.getMainLooper()).post(uiTask);
+            }
+        });
     }
 }

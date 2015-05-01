@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
@@ -15,10 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import controller.AbstractQuerier;
+import controller.GoogleQuerier;
 import controller.OpenCnamQuerier;
 import model.QueryResult;
 import threadimplementations.AsyncResponse;
 import threadimplementations.QuerierAsyncTask;
+import threadimplementations.QuerierLooper;
 
 
 public class PrankCallerIdentification extends Activity implements AsyncResponse {
@@ -103,10 +104,9 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
     public void startSearchLooper (View view)
     {
-        /*
-        Handler handler = new Handler();
-        handler.post()
-        */
+        QuerierLooper looper = new QuerierLooper(this);
+        looper.start();
+        looper.enqueueQuery(getCallingNumber(view));
     }
 
     public void startSearchAsyncTask(View view)
@@ -144,7 +144,6 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
         AbstractQuerier querier = new OpenCnamQuerier();
         QueryResult result = querier.query(getCallingNumber(view));
-        //QueryResult result = querier.query("16502530000");
         this.processFinish(result);
     }
 
