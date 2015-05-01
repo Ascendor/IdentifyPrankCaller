@@ -96,7 +96,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
             callingNumber = edtCallingNumber.getText().toString();
         }
         Log.i(LOGN,"getCallingNumber(): editText content: " + callingNumber);
-        if (callingNumber == "") callingNumber = "16502530000";
+        if (callingNumber.equals("")) callingNumber = "16502530000";
         Log.i(LOGN,"getCallingNumber(): return callingNumber: " + callingNumber);
         return callingNumber;
     }
