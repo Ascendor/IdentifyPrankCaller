@@ -25,12 +25,13 @@ import threadimplementations.QuerierLooper;
 public class PrankCallerIdentification extends Activity implements AsyncResponse {
     public  static final String LOGN = "PrankCallerIdent";
     public static final String PREFS_NAME = "PCIPrefsFile";
-    private static final int MENU_SIZE = 5;
+    private static final int MENU_SIZE = 6;
     public static final int MENU_TASK_METHOD_GUI = 0;
     public static final int MENU_TASK_METHOD_THREAD = 1;
     public static final int MENU_TASK_METHOD_ASYNC = 2;
-    public static final int MENU_SEARCH_ENGINE_GOOGLE = 3;
-    public static final int MENU_SEARCH_ENGINE_OPEN_CNAME = 4;
+    public static final int MENU_TASK_METHOD_LOOPER = 3;
+    public static final int MENU_SEARCH_ENGINE_GOOGLE = 4;
+    public static final int MENU_SEARCH_ENGINE_OPEN_CNAME = 5;
 
     private boolean menu_values[] = new boolean[MENU_SIZE];
     EditText edtCallingNumber;
@@ -66,6 +67,8 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
                 return setVisualMenuCheckState( MENU_TASK_METHOD_THREAD, "menu_task_methods", item );
             case R.id.menu_task_method_async:
                 return setVisualMenuCheckState( MENU_TASK_METHOD_ASYNC, "menu_task_methods", item );
+            case R.id.menu_task_method_looper:
+                return setVisualMenuCheckState( MENU_TASK_METHOD_LOOPER, "menu_task_methods", item );
             case R.id.menu_search_engine_google:
                 return setVisualMenuCheckState( MENU_SEARCH_ENGINE_GOOGLE, "menu_search_engines", item );
             case R.id.menu_search_engine_open_cname:
@@ -86,7 +89,9 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
                  startSearchGuiThread(view);
               } else if (menu_values[MENU_TASK_METHOD_THREAD]){
                         startSearchThread(view);
-                     }
+                     } else if (menu_values[MENU_TASK_METHOD_LOOPER]){
+                                startSearchLooper(view);
+                            }
     }
 
 
@@ -162,11 +167,13 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         menu_values[MENU_TASK_METHOD_GUI] = settings.getBoolean("menu_task_method_gui", false);
         menu_values[MENU_TASK_METHOD_THREAD] = settings.getBoolean("menu_task_method_thread", false);
         menu_values[MENU_TASK_METHOD_ASYNC] = settings.getBoolean("menu_task_method_async", false);
+        menu_values[MENU_TASK_METHOD_LOOPER] = settings.getBoolean("menu_task_method_looper", false);
         menu_values[MENU_SEARCH_ENGINE_GOOGLE] = settings.getBoolean("menu_search_engine_google", false);
         menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME] = settings.getBoolean("menu_search_engine_open_cname", false);
 
         //set defaults for first use
-        if (!menu_values[MENU_TASK_METHOD_ASYNC] && !menu_values[MENU_TASK_METHOD_GUI] && !menu_values[MENU_TASK_METHOD_THREAD]) {
+        if (!menu_values[MENU_TASK_METHOD_ASYNC] && !menu_values[MENU_TASK_METHOD_GUI] &&
+            !menu_values[MENU_TASK_METHOD_THREAD] && !menu_values[MENU_TASK_METHOD_LOOPER]) {
             Log.i(LOGN, "loadMenuValues(): Set default values for MENU_TASK_METHOD");
             menu_values[MENU_TASK_METHOD_GUI] = true;
         }
@@ -184,6 +191,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         editor.putBoolean("menu_task_method_gui", menu_values[MENU_TASK_METHOD_GUI]);
         editor.putBoolean("menu_task_method_thread", menu_values[MENU_TASK_METHOD_THREAD]);
         editor.putBoolean("menu_task_method_async", menu_values[MENU_TASK_METHOD_ASYNC]);
+        editor.putBoolean("menu_task_method_looper", menu_values[MENU_TASK_METHOD_LOOPER]);
         editor.putBoolean("menu_search_engine_google", menu_values[MENU_SEARCH_ENGINE_GOOGLE]);
         editor.putBoolean("menu_search_engine_open_cname", menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]);
         editor.apply();
@@ -200,6 +208,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
             menu_values[MENU_TASK_METHOD_GUI] = false;
             menu_values[MENU_TASK_METHOD_THREAD] = false;
             menu_values[MENU_TASK_METHOD_ASYNC] = false;
+            menu_values[MENU_TASK_METHOD_LOOPER] = false;
         }
         if (menuGroup.equals("menu_search_engines")){
             menu_values[MENU_SEARCH_ENGINE_GOOGLE] = false;
@@ -220,6 +229,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         menu.findItem(R.id.menu_task_method_gui).setChecked(menu_values[MENU_TASK_METHOD_GUI]);
         menu.findItem(R.id.menu_task_method_thread).setChecked(menu_values[MENU_TASK_METHOD_THREAD]);
         menu.findItem(R.id.menu_task_method_async).setChecked(menu_values[MENU_TASK_METHOD_ASYNC]);
+        menu.findItem(R.id.menu_task_method_looper).setChecked(menu_values[MENU_TASK_METHOD_LOOPER]);
         menu.findItem(R.id.menu_search_engine_google).setChecked(menu_values[MENU_SEARCH_ENGINE_GOOGLE]);
         menu.findItem(R.id.menu_search_engine_open_cname).setChecked(menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]);
     }

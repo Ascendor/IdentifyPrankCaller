@@ -22,6 +22,10 @@
                     android:title="Async Task"
                     android:enabled="true" />
 
+                <item android:id="@+id/menu_task_method_looper"
+                    android:title="Looper"
+                    android:enabled="true" />
+
             </group>
         </menu>
     </item>
@@ -32,14 +36,16 @@
         <menu>
             <group android:id="@+id/menu_search_engines"
                     android:enabled="true"
-                    android:checkableBehavior="single">
+                    android:checkableBehavior="all">
 
                 <item android:id="@+id/menu_search_engine_google"
                     android:title="Google Search"
+                    android:checkable="true"
                     android:enabled="true" />
 
                 <item android:id="@+id/menu_search_engine_open_cname"
                     android:title="Open CName"
+                    android:checkable="true"
                     android:enabled="true" />
 
             </group>
