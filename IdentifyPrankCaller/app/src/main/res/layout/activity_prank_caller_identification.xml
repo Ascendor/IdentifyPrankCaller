@@ -85,11 +85,25 @@
         android:layout_alignRight="@+id/searchButtonAsync"
         android:layout_alignEnd="@+id/searchButtonAsync" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/BtnSearchExecutorText"
+        android:id="@+id/searchButtonExecutor"
+        android:clickable="true"
+        android:onClick="startSearchExecutor"
+        style="@style/AppTheme"
+        android:layout_below="@+id/searchButtonLooper"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/searchButtonLooper"
+        android:layout_alignEnd="@+id/searchButtonLooper" />
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/frameLayout"
-        android:layout_below="@+id/searchButtonLooper">
+        android:layout_below="@+id/searchButtonExecutor">
 
         <TextView
             android:layout_width="fill_parent"

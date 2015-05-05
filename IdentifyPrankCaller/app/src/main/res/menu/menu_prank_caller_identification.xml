@@ -26,6 +26,10 @@
                     android:title="Looper"
                     android:enabled="true" />
 
+                <item android:id="@+id/menu_task_method_executor"
+                    android:title="Executor"
+                    android:enabled="true" />
+
             </group>
         </menu>
     </item>
