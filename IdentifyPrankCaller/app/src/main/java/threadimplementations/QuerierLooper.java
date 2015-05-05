@@ -9,6 +9,7 @@ import model.QueryResult;
 
 /**
  * Created by Alex on 17.04.2015.
+ * QuerierLooper implements a standard Android Looper
  */
 public class QuerierLooper extends Thread
 {
@@ -25,13 +26,24 @@ public class QuerierLooper extends Thread
     public void run()
     {
         Looper.prepare();
-
-        handler = new Handler();
-
+        synchronized (this) {
+            this.handler = new Handler();
+            notifyAll();
+        }
         Looper.loop();
     }
 
-    public synchronized void enqueueQuery(final String phoneNumber) {
+    public void enqueueQuery(final String phoneNumber)
+    {
+        synchronized (this) {
+            try {
+                while (this.handler == null) {
+                    wait();
+                }
+            } catch (InterruptedException e) {
+                // no action
+            }
+        }
         this.handler.post(new Runnable(){
             public void run(){
                 AbstractQuerier querier = new OpenCnamQuerier();

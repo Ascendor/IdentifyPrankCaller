@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import controller.AbstractQuerier;
 import controller.GoogleQuerier;
 import controller.OpenCnamQuerier;
@@ -81,7 +83,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
     public void startSearch(View view)
     {
-        Log.i(LOGN, "startSearch(): menu_values: " + menu_values.toString());
+        Log.i(LOGN, "startSearch(): menu_values: " + Arrays.toString(menu_values));
        //Start search depending on the menu_values
        if (menu_values[MENU_TASK_METHOD_ASYNC]) {
            startSearchAsyncTask(view);
@@ -101,9 +103,9 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         if ( edtCallingNumber != null ) {
             callingNumber = edtCallingNumber.getText().toString();
         }
-        Log.i(LOGN,"getCallingNumber(): editText content: " + callingNumber);
+        Log.i(LOGN, "getCallingNumber(): editText content: " + callingNumber);
         if (callingNumber.equals("")) callingNumber = "16502530000";
-        Log.i(LOGN,"getCallingNumber(): return callingNumber: " + callingNumber);
+        Log.i(LOGN, "getCallingNumber(): return callingNumber: " + callingNumber);
         return callingNumber;
     }
 
@@ -216,7 +218,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         }
         menu_values[ menuId ] = true;
 
-        Log.i(LOGN, "setVisualMenuCheckState(): menu_values: " + menu_values.toString());
+        Log.i(LOGN, "setVisualMenuCheckState(): menu_values: " +Arrays.toString(menu_values));
         //persist menu values
         saveMenuValues();
 
