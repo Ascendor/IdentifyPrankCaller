@@ -52,6 +52,11 @@
                     android:checkable="true"
                     android:enabled="true" />
 
+                <item android:id="@+id/menu_search_engine_mock"
+                    android:title="Mock/Dummy"
+                    android:checkable="true"
+                    android:enabled="true" />
+
             </group>
         </menu>
     </item>

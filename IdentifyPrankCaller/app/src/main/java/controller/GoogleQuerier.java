@@ -13,6 +13,7 @@ import model.QueryResult;
 
 /**
  * Created by Alex on 07.04.2015.
+ * GoogleQuerier looks up a phone number with Google
  */
 public class GoogleQuerier extends AbstractQuerier {
     private final static String uri = "https://www.googleapis.com/customsearch/v1";
@@ -24,7 +25,7 @@ public class GoogleQuerier extends AbstractQuerier {
         try {
             HttpResponse response = http.execute(new HttpGet(GoogleQuerier.uri + "?q=" + phoneNumber));
             InputStream content = response.getEntity().getContent();
-            result = new QueryResult("bla", content.toString(), content.toString());
+            result = new QueryResult(GoogleQuerier.uri, content.toString(), content.toString());
         } catch (IOException e) {
             System.err.println("Error 1: " + e.getMessage());
         } catch (URISyntaxException e) {

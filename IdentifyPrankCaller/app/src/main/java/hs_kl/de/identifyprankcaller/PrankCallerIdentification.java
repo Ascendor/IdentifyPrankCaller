@@ -30,7 +30,7 @@ import threadimplementations.QuerierLooper;
 public class PrankCallerIdentification extends Activity implements AsyncResponse {
     public  static final String LOGN = "PrankCallerIdent";
     public static final String PREFS_NAME = "PCIPrefsFile";
-    private static final int MENU_SIZE = 7;
+    private static final int MENU_SIZE = 8;
     public static final int MENU_TASK_METHOD_GUI = 0;
     public static final int MENU_TASK_METHOD_THREAD = 1;
     public static final int MENU_TASK_METHOD_ASYNC = 2;
@@ -38,12 +38,14 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
     public static final int MENU_TASK_METHOD_EXECUTOR = 4;
     public static final int MENU_SEARCH_ENGINE_GOOGLE = 5;
     public static final int MENU_SEARCH_ENGINE_OPEN_CNAME = 6;
+    public static final int MENU_SEARCH_ENGINE_MOCK = 7;
 
     private boolean menu_values[] = new boolean[MENU_SIZE];
     EditText edtCallingNumber;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prank_caller_identification);
         edtCallingNumber = (EditText) findViewById(R.id.edtCallingNumber);
@@ -51,7 +53,8 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_prank_caller_identification, menu);
         restoreVisualMenuCheckState(menu);
@@ -59,7 +62,8 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
     }
 
      @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -75,10 +79,14 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
                 return setVisualMenuCheckState( MENU_TASK_METHOD_ASYNC, "menu_task_methods", item );
             case R.id.menu_task_method_looper:
                 return setVisualMenuCheckState( MENU_TASK_METHOD_LOOPER, "menu_task_methods", item );
+            case R.id.menu_task_method_executor:
+                return setVisualMenuCheckState( MENU_TASK_METHOD_EXECUTOR, "menu_task_methods", item );
             case R.id.menu_search_engine_google:
                 return setVisualMenuCheckState( MENU_SEARCH_ENGINE_GOOGLE, "menu_search_engines", item );
             case R.id.menu_search_engine_open_cname:
                 return setVisualMenuCheckState( MENU_SEARCH_ENGINE_OPEN_CNAME, "menu_search_engines", item );
+            case R.id.menu_search_engine_mock:
+                return setVisualMenuCheckState( MENU_SEARCH_ENGINE_MOCK, "menu_search_engines", item );
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -87,8 +95,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
     public void startSearch(View view)
     {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
+        this.resetResult();
         Log.i(LOGN, "startSearch(): menu_values: " + Arrays.toString(menu_values));
 
        //Start search depending on the menu_values
@@ -105,6 +112,111 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         }
     }
 
+    public void startSearchGuiThread(View view)
+    {
+        this.resetResult();
+        List<AbstractQuerier> queriers = new ArrayList<>();
+        AbstractQuerier querier = new MockQuerier();
+        queriers.add(querier);
+        this.startSearchGuiThread(view, queriers);
+    }
+
+    public void startSearchGuiThread(View view, List<AbstractQuerier> queriers)
+    {
+        // @todo @fixme Don't do stuff like this! It's here just for demonstration purposes.
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        // End hack
+        for (AbstractQuerier querier : queriers) {
+            this.processFinish(querier.query(getCallingNumber(view)));
+        }
+    }
+
+    public void startSearchThread (View view)
+    {
+        this.resetResult();
+        List<AbstractQuerier> list = new ArrayList<>();
+        list.add(new MockQuerier());
+        this.startSearchThread(view, list);
+    }
+
+    public void startSearchThread(View view, List<AbstractQuerier> queriers)
+    {
+        final String number = getCallingNumber(view);
+        for (final AbstractQuerier querier : queriers) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final QueryResult result = querier.query(number);
+                    PrankCallerIdentification.this.runOnUiThread(new Runnable(){
+                        @Override
+                        public void run()
+                        {
+                            PrankCallerIdentification.this.processFinish(result);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+
+    public void startSearchLooper (View view)
+    {
+        this.resetResult();
+        List<AbstractQuerier> list = new ArrayList<>();
+        list.add(new MockQuerier());
+        this.startSearchLooper(view, list);
+    }
+
+    public void startSearchLooper (View view, List<AbstractQuerier> queriers)
+    {
+        QuerierLooper looper = new QuerierLooper(this);
+        for (final AbstractQuerier querier : queriers) {
+            looper.start();
+            looper.enqueueQuery(querier, getCallingNumber(view));
+        }
+    }
+
+    public void startSearchAsyncTask(View view)
+    {
+        this.resetResult();
+        AbstractQuerier querier = new MockQuerier();
+        ArrayList<AbstractQuerier> queriers = new ArrayList<>();
+        queriers.add(querier);
+        this.startSearchAsyncTask(view, queriers);
+    }
+
+    public void startSearchAsyncTask (View view, List<AbstractQuerier> queriers)
+    {
+        for (final AbstractQuerier querier : queriers) {
+            QuerierAsyncTask task = new QuerierAsyncTask(getCallingNumber(view), this);
+            task.execute(querier);
+        }
+    }
+
+    public void startSearchExecutor(View view)
+    {
+        this.resetResult();
+        List<AbstractQuerier> queriers = new ArrayList<>();
+        AbstractQuerier querier = new MockQuerier();
+        queriers.add(querier);
+
+        this.startSearchExecutor(view, queriers);
+    }
+
+    public void startSearchExecutor(View view, List<AbstractQuerier> queriers)
+    {
+        QuerierExecutor executor = new QuerierExecutor(this, this);
+        for (AbstractQuerier querier : queriers) {
+            executor.enqueueQuery(getCallingNumber(view), querier);
+        }
+    }
+
+    public void resetResult()
+    {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+    }
 
     public String getCallingNumber(View view) {
         //returns the value of edtCallingNumber from the view
@@ -129,109 +241,13 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         if (menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]) {
             AbstractQuerier cnamQuerier = new OpenCnamQuerier();
             queriers.add(cnamQuerier);
-        }
+
+
+        if (menu_values[MENU_SEARCH_ENGINE_MOCK]) {
+            AbstractQuerier mockQuerier = new MockQuerier();
+            queriers.add(mockQuerier);
+        }   }
         return queriers;
-    }
-
-    public void startSearchLooper (View view)
-    {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
-        ArrayList<AbstractQuerier> list = new ArrayList<AbstractQuerier>();
-        list.add(new MockQuerier());
-        this.startSearchLooper(view, list);
-    }
-
-    public void startSearchLooper (View view, List<AbstractQuerier> queriers)
-    {
-        QuerierLooper looper = new QuerierLooper(this);
-        for (final AbstractQuerier querier : queriers) {
-            looper.start();
-            looper.enqueueQuery(querier, getCallingNumber(view));
-        }
-    }
-
-    public void startSearchAsyncTask (View view, List<AbstractQuerier> queriers)
-    {
-        for (final AbstractQuerier querier : queriers) {
-            QuerierAsyncTask task = new QuerierAsyncTask(getCallingNumber(view), this);
-            task.execute(querier);
-        }
-    }
-
-    public void startSearchAsyncTask(View view)
-    {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
-        AbstractQuerier querier = new MockQuerier();
-        ArrayList<AbstractQuerier> queriers = new ArrayList<>();
-        queriers.add(querier);
-        this.startSearchAsyncTask(view, queriers);
-    }
-
-    public void startSearchThread (View view)
-    {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
-        ArrayList<AbstractQuerier> list = new ArrayList<AbstractQuerier>();
-        list.add(new MockQuerier());
-        this.startSearchThread(view, list);
-    }
-    public void startSearchThread(View view, List<AbstractQuerier> queriers)
-    {
-        final String number = getCallingNumber(view);
-        for (final AbstractQuerier querier : queriers) {
-            System.err.println("querier");
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    final QueryResult result = querier.query(number);
-                    PrankCallerIdentification.this.runOnUiThread(new Runnable(){
-                        @Override
-                        public void run()
-                        {
-                            PrankCallerIdentification.this.processFinish(result);
-                        }
-                    });
-                }
-            }).start();
-        }
-    }
-
-    public void startSearchGuiThread(View view, List<AbstractQuerier> queriers)
-    {
-        for (AbstractQuerier querier : queriers) {
-            this.processFinish(querier.query(getCallingNumber(view)));
-        }
-    }
-
-    public void startSearchGuiThread(View view)
-    {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
-        List<AbstractQuerier> queriers = new ArrayList<>();
-        AbstractQuerier querier = new MockQuerier();
-        queriers.add(querier);
-        this.startSearchGuiThread(view, queriers);
-    }
-
-    public void startSearchExecutor(View view)
-    {
-        TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText("");
-        List<AbstractQuerier> queriers = new ArrayList<>();
-        AbstractQuerier querier = new MockQuerier();
-        queriers.add(querier);
-
-        this.startSearchExecutor(view, queriers);
-    }
-
-    public void startSearchExecutor(View view, List<AbstractQuerier> queriers)
-    {
-        QuerierExecutor executor = new QuerierExecutor(this, this);
-        for (AbstractQuerier querier : queriers) {
-            executor.enqueueQuery(getCallingNumber(view), querier);
-        }
     }
 
     @Override
@@ -263,6 +279,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         menu_values[MENU_TASK_METHOD_EXECUTOR] = settings.getBoolean("menu_task_method_executor", false);
         menu_values[MENU_SEARCH_ENGINE_GOOGLE] = settings.getBoolean("menu_search_engine_google", false);
         menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME] = settings.getBoolean("menu_search_engine_open_cname", false);
+        menu_values[MENU_SEARCH_ENGINE_MOCK] = settings.getBoolean("menu_search_engine_mock", false);
 
 
         //set defaults for first use
@@ -273,9 +290,10 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
             Log.i(LOGN, "loadMenuValues(): Set default values for MENU_TASK_METHOD");
             menu_values[MENU_TASK_METHOD_GUI] = true;
         }
-        if (!menu_values[MENU_SEARCH_ENGINE_GOOGLE] && !menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]) {
+        if (!menu_values[MENU_SEARCH_ENGINE_GOOGLE] && !menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]
+                && !menu_values[MENU_SEARCH_ENGINE_MOCK]) {
             Log.i(LOGN, "loadMenuValues(): Set default values for MENU_SEARCH_ENGINE");
-            menu_values[MENU_SEARCH_ENGINE_GOOGLE] = true;
+            menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME] = true;
         }
     }
 
@@ -291,6 +309,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         editor.putBoolean("menu_task_method_executor", menu_values[MENU_TASK_METHOD_EXECUTOR]);
         editor.putBoolean("menu_search_engine_google", menu_values[MENU_SEARCH_ENGINE_GOOGLE]);
         editor.putBoolean("menu_search_engine_open_cname", menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]);
+        editor.putBoolean("menu_search_engine_mock", menu_values[MENU_SEARCH_ENGINE_MOCK]);
         editor.apply();
         Log.i(LOGN, "saveMenuValues(): Menu values persisted");
     }
@@ -334,6 +353,7 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         menu.findItem(R.id.menu_task_method_executor).setChecked(menu_values[MENU_TASK_METHOD_EXECUTOR]);
         menu.findItem(R.id.menu_search_engine_google).setChecked(menu_values[MENU_SEARCH_ENGINE_GOOGLE]);
         menu.findItem(R.id.menu_search_engine_open_cname).setChecked(menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]);
+        menu.findItem(R.id.menu_search_engine_mock).setChecked(menu_values[MENU_SEARCH_ENGINE_MOCK]);
     }
 
 }
