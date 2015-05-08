@@ -1,5 +1,7 @@
 package threadimplementations;
 
+import java.util.ArrayList;
+
 import model.QueryResult;
 
 /**
@@ -8,4 +10,5 @@ import model.QueryResult;
 public interface AsyncResponse
 {
     void processFinish(QueryResult result);
+    void processFinish(ArrayList<QueryResult> results);
 }

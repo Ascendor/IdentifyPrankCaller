@@ -11,9 +11,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.AbstractCollection;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import controller.AbstractQuerier;
+import controller.GoogleQuerier;
+import controller.MockQuerier;
 import controller.OpenCnamQuerier;
 import model.QueryResult;
 import threadimplementations.AsyncResponse;
@@ -82,18 +87,21 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
 
     public void startSearch(View view)
     {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
         Log.i(LOGN, "startSearch(): menu_values: " + Arrays.toString(menu_values));
+
        //Start search depending on the menu_values
         if (menu_values[MENU_TASK_METHOD_ASYNC]) {
-            startSearchAsyncTask(view);
+            startSearchAsyncTask(view, this.getQueriers());
         } else if (menu_values[MENU_TASK_METHOD_GUI]){
-            startSearchGuiThread(view);
+            startSearchGuiThread(view, this.getQueriers());
         } else if (menu_values[MENU_TASK_METHOD_THREAD]){
-             startSearchThread(view);
+             startSearchThread(view, this.getQueriers());
         } else if (menu_values[MENU_TASK_METHOD_LOOPER]){
-            startSearchLooper(view);
+            startSearchLooper(view, this.getQueriers());
         } else if (menu_values[MENU_TASK_METHOD_EXECUTOR]) {
-            startSearchExecutor(view);
+            startSearchExecutor(view, this.getQueriers());
         }
     }
 
@@ -110,64 +118,139 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
         return callingNumber;
     }
 
+    public List<AbstractQuerier> getQueriers()
+    {
+        ArrayList<AbstractQuerier> queriers = new ArrayList<>();
+        if (menu_values[MENU_SEARCH_ENGINE_GOOGLE]) {
+            AbstractQuerier googleQuerier = new GoogleQuerier();
+            queriers.add(googleQuerier);
+        }
+
+        if (menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME]) {
+            AbstractQuerier cnamQuerier = new OpenCnamQuerier();
+            queriers.add(cnamQuerier);
+        }
+        return queriers;
+    }
+
     public void startSearchLooper (View view)
     {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+        ArrayList<AbstractQuerier> list = new ArrayList<AbstractQuerier>();
+        list.add(new MockQuerier());
+        this.startSearchLooper(view, list);
+    }
+
+    public void startSearchLooper (View view, List<AbstractQuerier> queriers)
+    {
         QuerierLooper looper = new QuerierLooper(this);
-        looper.start();
-        looper.enqueueQuery(getCallingNumber(view));
+        for (final AbstractQuerier querier : queriers) {
+            looper.start();
+            looper.enqueueQuery(querier, getCallingNumber(view));
+        }
+    }
+
+    public void startSearchAsyncTask (View view, List<AbstractQuerier> queriers)
+    {
+        for (final AbstractQuerier querier : queriers) {
+            QuerierAsyncTask task = new QuerierAsyncTask(getCallingNumber(view), this);
+            task.execute(querier);
+        }
     }
 
     public void startSearchAsyncTask(View view)
     {
-        QuerierAsyncTask task = new QuerierAsyncTask(this);
-        task.execute(getCallingNumber(view));
-        //task.execute("16502530000");
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+        AbstractQuerier querier = new MockQuerier();
+        ArrayList<AbstractQuerier> queriers = new ArrayList<>();
+        queriers.add(querier);
+        this.startSearchAsyncTask(view, queriers);
     }
 
-    public void startSearchThread(View view)
+    public void startSearchThread (View view)
+    {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+        ArrayList<AbstractQuerier> list = new ArrayList<AbstractQuerier>();
+        list.add(new MockQuerier());
+        this.startSearchThread(view, list);
+    }
+    public void startSearchThread(View view, List<AbstractQuerier> queriers)
     {
         final String number = getCallingNumber(view);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AbstractQuerier querier = new OpenCnamQuerier();
-                final QueryResult result = querier.query(number);
-                PrankCallerIdentification.this.runOnUiThread(new Runnable(){
-                    @Override
-                    public void run()
-                    {
-                        PrankCallerIdentification.this.processFinish(result);
-                    }
-                });
-            }
-        }).start();
+        for (final AbstractQuerier querier : queriers) {
+            System.err.println("querier");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final QueryResult result = querier.query(number);
+                    PrankCallerIdentification.this.runOnUiThread(new Runnable(){
+                        @Override
+                        public void run()
+                        {
+                            PrankCallerIdentification.this.processFinish(result);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+
+    public void startSearchGuiThread(View view, List<AbstractQuerier> queriers)
+    {
+        for (AbstractQuerier querier : queriers) {
+            this.processFinish(querier.query(getCallingNumber(view)));
+        }
     }
 
     public void startSearchGuiThread(View view)
     {
-        // @todo @fixme Don't do stuff like this! It's here just for demonstration purposes.
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        // End hack
-
-        AbstractQuerier querier = new OpenCnamQuerier();
-        QueryResult result = querier.query(getCallingNumber(view));
-        this.processFinish(result);
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+        List<AbstractQuerier> queriers = new ArrayList<>();
+        AbstractQuerier querier = new MockQuerier();
+        queriers.add(querier);
+        this.startSearchGuiThread(view, queriers);
     }
 
     public void startSearchExecutor(View view)
     {
+        TextView resultText = (TextView) findViewById(R.id.resultText);
+        resultText.setText("");
+        List<AbstractQuerier> queriers = new ArrayList<>();
+        AbstractQuerier querier = new MockQuerier();
+        queriers.add(querier);
+
+        this.startSearchExecutor(view, queriers);
+    }
+
+    public void startSearchExecutor(View view, List<AbstractQuerier> queriers)
+    {
         QuerierExecutor executor = new QuerierExecutor(this, this);
-        executor.enqueueQuery(getCallingNumber(view));
+        for (AbstractQuerier querier : queriers) {
+            executor.enqueueQuery(getCallingNumber(view), querier);
+        }
     }
 
     @Override
     public void processFinish(QueryResult result)
     {
         TextView resultText = (TextView) findViewById(R.id.resultText);
+        //resultText.append(result.getUri() + "\n | " + result.getShortDescription() + ": " + result.getDescription() + "<![CDATA[<br>]]>" + System.getProperty ("line.separator"));
         resultText.setText(result.getDescription());
     }
 
+    @Override
+    public void processFinish(ArrayList<QueryResult> results)
+    {
+        for (QueryResult result : results) {
+            TextView resultText = (TextView) findViewById(R.id.resultText);
+            resultText.append(result.getDescription());
+        }
+
+    }
 
 
     public void loadMenuValues() {
@@ -224,12 +307,15 @@ public class PrankCallerIdentification extends Activity implements AsyncResponse
             menu_values[MENU_TASK_METHOD_ASYNC] = false;
             menu_values[MENU_TASK_METHOD_LOOPER] = false;
             menu_values[MENU_TASK_METHOD_EXECUTOR] = false;
+            menu_values[ menuId ] = true;
         }
         if (menuGroup.equals("menu_search_engines")){
-            menu_values[MENU_SEARCH_ENGINE_GOOGLE] = false;
-            menu_values[MENU_SEARCH_ENGINE_OPEN_CNAME] = false;
+            if (menu_values[menuId]) {
+                menu_values[menuId] = false;
+            } else {
+                menu_values[menuId] = true;
+            }
         }
-        menu_values[ menuId ] = true;
 
         Log.i(LOGN, "setVisualMenuCheckState(): menu_values: " +Arrays.toString(menu_values));
         //persist menu values

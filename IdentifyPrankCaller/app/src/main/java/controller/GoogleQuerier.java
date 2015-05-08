@@ -15,7 +15,7 @@ import model.QueryResult;
  * Created by Alex on 07.04.2015.
  */
 public class GoogleQuerier extends AbstractQuerier {
-    private final static String uri = "http://www.google.de";
+    private final static String uri = "https://www.googleapis.com/customsearch/v1";
     @Override
     public QueryResult query (String phoneNumber)
     {

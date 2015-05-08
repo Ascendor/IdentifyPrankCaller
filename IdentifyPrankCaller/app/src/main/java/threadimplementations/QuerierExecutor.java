@@ -29,11 +29,10 @@ public class QuerierExecutor
 
     }
 
-    public void enqueueQuery(final String phoneNumber)
+    public void enqueueQuery(final String phoneNumber, final AbstractQuerier querier)
     {
         this.executor.execute(new Runnable(){
             public void run(){
-                AbstractQuerier querier = new OpenCnamQuerier();
                 final QueryResult result = querier.query(phoneNumber);
                 Runnable uiTask = new Runnable() {
                     @Override

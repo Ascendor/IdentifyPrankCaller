@@ -17,10 +17,12 @@ public class MockQuerier extends AbstractQuerier
     {
         QueryResult dummyResult = null;
         try {
+            for (int i=0; i<1000000000; i++);
             dummyResult = new QueryResult(uri, "Foo Bar", "Fucked up beyond all recognition");
         } catch (URISyntaxException e) {
             // no action
         }
+
         return dummyResult;
     }
 }

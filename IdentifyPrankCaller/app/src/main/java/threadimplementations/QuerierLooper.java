@@ -33,7 +33,7 @@ public class QuerierLooper extends Thread
         Looper.loop();
     }
 
-    public void enqueueQuery(final String phoneNumber)
+    public void enqueueQuery(final AbstractQuerier querier, final String phoneNumber)
     {
         synchronized (this) {
             try {
@@ -46,7 +46,6 @@ public class QuerierLooper extends Thread
         }
         this.handler.post(new Runnable(){
             public void run(){
-                AbstractQuerier querier = new OpenCnamQuerier();
                 final QueryResult result = querier.query(phoneNumber);
                 Runnable uiTask = new Runnable() {
                     @Override

@@ -3,7 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="DefSpinCallingNumber">063315580</string>
+    <string name="DefSpinCallingNumber">+16502530000</string>
     <string name="BtnSearchGUIText">Search via GUI Thread</string>
     <string name="BtnSearchAsyncText">Search via AsyncTask</string>
     <string name="BtnSearchThreadText">Search via Thread</string>
